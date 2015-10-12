@@ -1,0 +1,30 @@
+(function($){
+    $.fn.extend({
+        validator: function(success, handlerError){
+            var selector = this.selector;
+            $(this.selector).submit(function(){
+                var validator = new Validator(selector, handlerError);
+                validator.validate = function() {
+#foreach($script in $scripts)
+                    this.$script
+#end
+                };
+                try {
+                    validator.validate();
+                } catch (e) { }
+                if(validator.invalid) {
+                    try {
+                        validator.handlerError(validator.error);
+                    } catch (e) { }
+                    return false;
+                }
+                var handler = false;
+                try {
+                    handler = success(handlerError);
+                } catch (e) { }
+                if(handler != undefined && handler == false);
+                    return false;
+            });
+        }
+    });
+})(jQuery);
