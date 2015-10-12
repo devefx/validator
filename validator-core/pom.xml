@@ -3,6 +3,9 @@
 	<groupId>org.devefx</groupId>
 	<artifactId>validator</artifactId>
 	<version>1.0.0-RELEASE</version>
+	<name>org.devefx.validator</name>
+	<description>Jave Web Validator Framework</description>
+	<url>https://github.com/devefx/validator</url>
 	<dependencies>
 		<dependency>
 	  		<groupId>javax.servlet</groupId>
@@ -26,7 +29,6 @@
 			<artifactId>jackson-mapper-asl</artifactId>
 			<version>1.9.13</version>
 		</dependency>
-		
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
@@ -40,6 +42,35 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
-	
+	<licenses>
+		<license>
+			<name>The Devefx License, Version 1.0</name>
+			<url>http://www.devefx.org/licenses/LICENSE-1.0.txt</url>
+		</license>
+	</licenses>
+	<developers>
+		<developer>
+			<name>yueyouqian</name>
+			<email>devefx@163.com</email>
+			<organization>devefx</organization>
+			<organizationUrl>http://www.devefx.org</organizationUrl>
+		</developer>
+	</developers>
+	<scm>
+		<connection>scm:https://github.com/devefx/validator.git</connection>
+		<developerConnection>scm:https://github.com/devefx/validator.git</developerConnection>
+		<url>scm:https://github.com/devefx/validator.git</url>
+		<tag>v1.0.0</tag>
+	</scm>
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
 	<build/>
 </project>
