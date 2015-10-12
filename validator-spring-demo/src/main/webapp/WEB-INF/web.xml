@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	<display-name>devefx</display-name>	
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+	<!-- Spring配置 -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<!-- 指定Spring Bean的配置文件所在目录 -->
+	<context-param>
+	    <param-name>contextConfigLocation</param-name>
+	    <param-value>classpath:applicationContext.xml</param-value>
+	</context-param>
+	<!-- 配置Spring MVC DispatcherServlet -->  
+	<servlet>
+		<servlet-name>dispatcher</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:applicationContext.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>dispatcher</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	<!-- 配置validator前端js生成器 -->
+	<servlet>
+		<servlet-name>validator</servlet-name>
+		<servlet-class>org.devefx.validator.servlet.ValidatorServlet</servlet-class>
+		<init-param>
+			<param-name>configClass</param-name>
+			<param-value>org.devefx.spring.validator.config.DefaultConfig</param-value>
+		</init-param> 
+		<init-param>
+			<param-name>validatorJs</param-name>
+			<param-value>/validator/validator.js</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>validator</servlet-name>
+		<url-pattern>/validator/*</url-pattern>
+	</servlet-mapping>
+</web-app>

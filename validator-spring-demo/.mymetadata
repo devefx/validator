@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="validator-spring-demo"
+  id="myeclipse.1444641667182"
+  context-root="/validator-spring-demo"
+  j2ee-spec="6.0"
+  archive="validator-spring-demo.war">
+  <attributes>
+    <attribute name="webrootdir" value="src/main/webapp" />
+  </attributes>
+</project-module>
+
