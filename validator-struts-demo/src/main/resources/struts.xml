@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC  
+    "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"  
+    "http://struts.apache.org/dtds/struts-2.3.dtd">  
+<struts>
+	<include file="struts-default.xml" />
+	
+	
+	<package name="all" extends="struts-default">
+		<interceptors>
+			<interceptor name="validatorInterceptor" 
+				class="org.devefx.validator.interceptor.struts.ValidatorInterceptor"/>
+			<interceptor-stack name="validatorStack">
+				<interceptor-ref name="defaultStack"/>
+				<interceptor-ref name="validatorInterceptor"/>
+			</interceptor-stack>
+		</interceptors>
+		
+		<default-interceptor-ref name="validatorStack" />
+	</package>
+	
+	
+	<package name="default" extends="all" namespace="/">
+		<action name="test"></action>
+		<action name="doSave" class="org.devefx.struts.action.TestAction" method="doSave"/>
+	</package>
+	
+	
+</struts>

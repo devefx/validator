@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	<display-name>devefx</display-name>	
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+	
+	<filter>
+		<filter-name>struts2</filter-name>
+		<filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>struts2</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<servlet>
+		<servlet-name>validator</servlet-name>
+		<servlet-class>org.devefx.validator.servlet.ValidatorServlet</servlet-class>
+		<init-param>
+			<param-name>configClass</param-name>
+			<param-value>org.devefx.struts.validator.config.DefaultConfig</param-value>
+		</init-param> 
+		<init-param>
+			<param-name>validatorJs</param-name>
+			<param-value>/validator/validator.js</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>validator</servlet-name>
+		<url-pattern>/validator/*</url-pattern>
+	</servlet-mapping>
+</web-app>
