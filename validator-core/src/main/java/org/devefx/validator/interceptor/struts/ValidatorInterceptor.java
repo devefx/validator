@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.devefx.validator.annotation.RequstValidator;
+import org.devefx.validator.annotation.RequestValidator;
 import org.devefx.validator.core.Validator;
 
 import com.opensymphony.xwork2.ActionContext;
@@ -28,8 +28,8 @@ public class ValidatorInterceptor extends MethodFilterInterceptor {
 		if (actionProxy.getAction() instanceof ActionSupport) {
 			Class<?> actionClass = actionProxy.getAction().getClass();
 			Method method = actionClass.getMethod(invocation.getProxy().getMethod());
-			if (method.isAnnotationPresent(RequstValidator.class)) {
-				RequstValidator requstValidator = method.getAnnotation(RequstValidator.class);
+			if (method.isAnnotationPresent(RequestValidator.class)) {
+				RequestValidator requstValidator = method.getAnnotation(RequestValidator.class);
 				Validator validator = requstValidator.value().newInstance();
 				ActionContext context = invocation.getInvocationContext();
 				HttpServletRequest request = (HttpServletRequest) context.get(HTTP_REQUEST);

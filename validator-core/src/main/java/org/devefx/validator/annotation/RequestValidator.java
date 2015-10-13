@@ -11,6 +11,6 @@ import org.devefx.validator.core.Validator;
 @Inherited
 @Target(value=ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface RequstValidator {
+public @interface RequestValidator {
 	public Class<? extends Validator> value();
 }
