@@ -33,7 +33,7 @@ function Validator(selector, handlerError) {
 		return valid.form.find("[name="+name+"]").val();
 	};
 	valid.validateRequired = function(field, errorKey, errorMessage) {
-		var value = this.getParameter(name);
+		var value = this.getParameter(field);
 		if (value == null || "" == value)
 			this.addError(errorKey, errorMessage);
 	};
