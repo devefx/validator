@@ -9,14 +9,14 @@ public class SaveValidator extends Validator {
 
 	@Override
 	protected void validate(HttpServletRequest request, HttpServletResponse response) {
-		validateRequiredString("nickname", "nickname", "êÇ³Æ²»ÄÜÎª¿Õ");
-		validateRequiredString("password", "password", "ÃÜÂë²»ÄÜÎª¿Õ");
-		validateString("password", 6, 20, "password", "ÃÜÂë³¤¶ÈÔÚ6-20Î»");
-		validateEqualField("password", "pass_again", "pass_again", "Á½´ÎÃÜÂë²»Ò»ÖÂ");
-		validateRequiredString("email", "email", "ÓÊÏä²»ÄÜÎª¿Õ");
-		validateEmail("email", "email", "ÓÊÏä¸ñÊ½ÓĞÎó");
-		validateRequiredString("mobile", "mobile", "ÊÖ»úºÅ²»ÄÜÎª¿Õ");
-		validateMobile("mobile", "mobile", "ÊÖ»ú¸ñÊ½ÓĞÎó");
+		validateRequiredString("nickname", "nickname", "æ˜µç§°ä¸èƒ½ä¸ºç©º");
+		validateRequiredString("password", "password", "å¯†ç ä¸èƒ½ä¸ºç©º");
+		validateString("password", 6, 20, "password", "å¯†ç é•¿åº¦åœ¨6-20ä½");
+		validateEqualField("password", "pass_again", "pass_again", "ä¸¤æ¬¡å¯†ç ä¸ä¸€è‡´");
+		validateRequiredString("email", "email", "é‚®ç®±ä¸èƒ½ä¸ºç©º");
+		validateEmail("email", "email", "é‚®ç®±æ ¼å¼æœ‰è¯¯");
+		validateRequiredString("mobile", "mobile", "æ‰‹æœºå·ä¸èƒ½ä¸ºç©º");
+		validateMobile("mobile", "mobile", "æ‰‹æœºæ ¼å¼æœ‰è¯¯");
 	}
 
 	@Override

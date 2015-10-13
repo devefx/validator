@@ -1,15 +1,15 @@
 package org.devefx.spring.controller;
 
 import org.devefx.spring.validator.SaveValidator;
-import org.devefx.validator.annotation.RequstValidator;
+import org.devefx.validator.annotation.RequestValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class TestController {
 	@RequestMapping("/doSave")
-	@RequstValidator(SaveValidator.class)
+	@RequestValidator(SaveValidator.class)
 	public void doSave() {
-		System.out.println("ÑéÖ¤³É¹¦£¬´¦ÀíÇëÇó");
+		System.out.println("éªŒè¯æˆåŠŸï¼Œå¤„ç†è¯·æ±‚");
 	}
 }
