@@ -11,7 +11,7 @@
 		<dependency>
 			<groupId>org.devefx</groupId>
 			<artifactId>validator</artifactId>
-			<version>1.0.0-RELEASE</version>
+			<version>1.0.1-RELEASE</version>
 		</dependency>
 		<dependency>
 	  		<groupId>javax.servlet</groupId>
@@ -50,5 +50,20 @@
 	  		<version>${spring.version}</version>
 	  	</dependency>
 	</dependencies>
-  <build/>
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.3</version>
+					<configuration>
+						<source>1.6</source>
+						<target>1.6</target>
+						<encoding>utf-8</encoding>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 </project>

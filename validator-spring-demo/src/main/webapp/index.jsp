@@ -15,7 +15,8 @@
 		<script type="text/javascript">
 			$(function(){
 				// 验证通过回调函数和处理错误回调函数
-				$("#saveForm").validator(function(handler){
+				// 1.0.1 增加验证器名称参数（若不填写则默认选择第一个验证器） v1.0.1
+				$("#saveForm").validator("SaveValidator", function(handler){
 					$(".err").remove();// 清空错误信息
 					$.ajax({
 						url:"${path}/doSave", dataType:"json", type:"post",
