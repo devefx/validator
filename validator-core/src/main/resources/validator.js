@@ -161,3 +161,37 @@ function Validator(selector, handlerError) {
 	};
 	return valid;
 }
+
+(function($){
+    $.fn.extend({
+        validator: function(name, success, handlerError){
+            var selector = this.selector;
+            $(this.selector).submit(function(){
+            	if (handlerError == undefined) {
+            		handlerError = success;
+            		success = name;
+            		for(var temp in Validate) {
+            			name = temp;
+            			break;
+            		}
+				}
+                var validator = new Validate[name](success, handlerError);
+                try {
+                    validator.validate();
+                } catch (e) { }
+                if(validator.invalid) {
+                    try {
+                        validator.handlerError(validator.error);
+                    } catch (e) { }
+                    return false;
+                }
+                var handler = false;
+                try {
+                    handler = success(handlerError);
+                } catch (e) { }
+                if(handler != undefined && handler == false);
+                    return false;
+            });
+        }
+    });
+})(jQuery);

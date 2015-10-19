@@ -105,6 +105,7 @@ public abstract class Validator {
 				
 				VelocityContext velocityContext = new VelocityContext();
 				velocityContext.put("scripts", validator.javascript);
+				velocityContext.put("name", getClass().getSimpleName());
 				Template template = velocityEngine.getTemplate("validator.vm");
 				
 				StringWriter writer = new StringWriter();
