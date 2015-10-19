@@ -175,7 +175,7 @@ function Validator(selector, handlerError) {
             			break;
             		}
 				}
-                var validator = new Validate[name](success, handlerError);
+                var validator = new Validate[name](selector, handlerError);
                 try {
                     validator.validate();
                 } catch (e) { }
