@@ -34,9 +34,11 @@ function SimpleDateFormat(pattern) {
 		return date;
 	};
 	object.format = function(date) {
+		function fmt(v,n){for(var i=n-(v+"").length;i>0;i--){v="0"+v;}return v;}
 		var h24 = date.getHours();
-		return this.pattern.replace("yyyy", date.getFullYear()).replace("MM", date.getMonth() + 1).replace("dd", date.getDate())
-			.replace("HH", h24).replace("hh", (h24-1)%12+1).replace("mm", date.getMinutes()).replace("ss", date.getSeconds());
+		return this.pattern.replace("yyyy", fmt(date.getFullYear(), 4)).replace("MM", fmt(date.getMonth() + 1, 2))
+			.replace("dd", fmt(date.getDate(), 2)).replace("HH", fmt(h24, 2)).replace("hh", fmt((h24-1)%12+1, 2))
+			.replace("mm", fmt(date.getMinutes(), 2)).replace("ss", fmt(date.getSeconds(), 2));
 	};
 	return object;
 }
