@@ -33,6 +33,11 @@ function SimpleDateFormat(pattern) {
 		if (time.second != undefined) date.setSeconds(time.second);
 		return date;
 	};
+	object.format = function(date) {
+		var h24 = date.getHours();
+		return this.pattern.replace("yyyy", date.getFullYear()).replace("MM", date.getMonth() + 1).replace("dd", date.getDate())
+			.replace("HH", h24).replace("hh", (h24-1)%12+1).replace("mm", date.getMinutes()).replace("ss", date.getSeconds());
+	};
 	return object;
 }
 function Validator(selector, handlerError) {
