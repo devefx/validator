@@ -11,22 +11,26 @@ function SimpleDateFormat(pattern) {
 		if(!this.regex.test(source))
 			throw new Error("Unparseable date: \"" + source + "\"");
 		var time = {
-			year: source.substr(this.position.year, 4), month: source.substr(this.position.month, 2),
-			day: source.substr(this.position.day, 2), hour: source.substr(this.position.hour, 2),
-			minute: source.substr(this.position.minute, 2), second: source.substr(this.position.second, 2)
+			year: source.substr(this.position.year, 4), month: source.substr(this.position.month, 2), day: source.substr(this.position.day, 2)
 		};
+		if (this.position.hour != -1)
+			time.hour = source.substr(this.position.hour, 2);
+		if (this.position.minute != -1)
+			time.minute = source.substr(this.position.minute, 2);
+		if (this.position.second != -1)
+			time.second = source.substr(this.position.second, 2);
 		var day31 = "01,03,05,07,08,10,12";
-		if (time.day == 31 && day31.indexOf(time.month) == -1)
+		if(time.day == 31 && day31.indexOf(time.month) == -1)
 			throw new Error("Unparseable date: \"" + source + "\"");
-		if (time.month == 2 && time.day == 29 && !(time.year % 4 == 0 && time.year % 100 != 0)
+		if(time.month == 2 && time.day == 29 && !(time.year % 4 == 0 && time.year % 100 != 0)
 			&& !(time.year % 100 == 0 && time.year % 400 == 0)) {
 			throw new Error("Unparseable date: \"" + source + "\"");
 		}
 		var date = new Date();
 		date.setFullYear(time.year, time.month - 1, time.day);
-		date.setHours(time.hour);
-		date.setMinutes(time.minute);
-		date.setSeconds(time.second);
+		if (time.hour != undefined) date.setHours(time.hour);
+		if (time.minute != undefined) date.setMinutes(time.minute);
+		if (time.second != undefined) date.setSeconds(time.second);
 		return date;
 	};
 	return object;
