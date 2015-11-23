@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE sqlMap        
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"        
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="Test">  
+	<typeAlias alias="Member" type="org.devefx.mirror.model.Member" />
+	
+	<resultMap id="MemberResult" class="Member">
+		<result property="id" column="id" />
+		<result property="username" column="username" />
+		<result property="password" column="password" />
+		<result property="email" column="email" />
+		<result property="registerTime" column="register_tm" />
+	</resultMap>
+	
+	<select id="getMemberById" resultMap="MemberResult" parameterClass="int">
+		select id, username, password, email, register_tm from t06_member_info where id = #id#
+	</select>
+</sqlMap>

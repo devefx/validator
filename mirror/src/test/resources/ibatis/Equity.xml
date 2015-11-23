@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE sqlMap        
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"        
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="Test">  
+	<typeAlias alias="Equity" type="org.devefx.mirror.model.Equity" />
+	
+	<resultMap id="EquityResult" class="Equity">
+		<result property="id" column="id" />
+		<result property="member" column="member_id" select="getMemberById" />
+	</resultMap>
+	<select id="getEquityById" resultMap="EquityResult" parameterClass="int">
+		select id, member_id from t06_equity where id = #id#
+	</select>
+</sqlMap>
