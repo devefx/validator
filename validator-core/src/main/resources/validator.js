@@ -49,6 +49,7 @@ function Validator(selector, handlerError) {
 	valid.shortCircuit = false;
 	valid.datePattern = null;
 	valid.error = {};
+	valid.checkedField = null;
 	valid.handlerError = handlerError;
 	var DEFAULT_DATE_PATTERN = "yyyy-MM-dd";
 	var emailAddressPattern = "\\b(^['_A-Za-z0-9-]+(\\.['_A-Za-z0-9-]+)*@([A-Za-z0-9-])+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z0-9]{2,})|(\\.[A-Za-z0-9]{2,}\\.[A-Za-z0-9]{2,}))$)\\b";
@@ -76,17 +77,29 @@ function Validator(selector, handlerError) {
 	valid.getParameter = function(name) {
 		return valid.form.find("[name="+name+"]").val();
 	};
+	valid.setCheckedField = function(field) {
+		valid.checkedField = field;
+	};
+	valid.isCheckedField = function(field) {
+		return valid.checkedField == null || field == valid.checkedField;
+	};
 	valid.validateRequired = function(field, errorKey, errorMessage) {
+		if (!this.isCheckedField(field)) return;
+		delete valid.error[errorKey];
 		var value = this.getParameter(field);
 		if (value == null || "" == value)
 			this.addError(errorKey, errorMessage);
 	};
 	valid.validateRequiredString = function(field, errorKey, errorMessage) {
+		if (!this.isCheckedField(field)) return;
+		delete valid.error[errorKey];
 		var value = this.getParameter(field);
 		if (value == null || "" == value.replace(/\s/ig, ""))
 			this.addError(errorKey, errorMessage);
 	};
 	valid.validateInteger = function(field, min, max, errorKey, errorMessage) {
+		if (!this.isCheckedField(field)) return;
+		delete valid.error[errorKey];
 		var value = this.getParameter(field);
 		if (value == null || "" == value.replace(/\s/ig, "")) {
 			this.addError(errorKey, errorMessage);
@@ -97,6 +110,8 @@ function Validator(selector, handlerError) {
 			this.addError(errorKey, errorMessage);
 	};
 	valid.validateInteger = function(field, errorKey, errorMessage) {
+		if (!this.isCheckedField(field)) return;
+		delete valid.error[errorKey];
 		var value = this.getParameter(field);
 		if (value == null || "" == value.replace(/\s/ig, "")) {
 			this.addError(errorKey, errorMessage);
@@ -108,12 +123,18 @@ function Validator(selector, handlerError) {
 		}
 	};
 	valid.validateLong = function(field, min, max, errorKey, errorMessage) {
+		if (!this.isCheckedField(field)) return;
+		delete valid.error[errorKey];
 		this.validateInteger(field, min, max, errorKey, errorMessage);
 	};
 	valid.validateLong = function(field, errorKey, errorMessage) {
+		if (!this.isCheckedField(field)) return;
+		delete valid.error[errorKey];
 		this.validateInteger(field, errorKey, errorMessage);
 	};
 	valid.validateDouble = function(field, min, max, errorKey, errorMessage) {
+		if (!this.isCheckedField(field)) return;
+		delete valid.error[errorKey];
 		var value = this.getParameter(field);
 		if (value == null || "" == value.replace(/\s/ig, "")) {
 			this.addError(errorKey, errorMessage);
@@ -124,6 +145,8 @@ function Validator(selector, handlerError) {
 			this.addError(errorKey, errorMessage);
 	};
 	valid.validateDouble = function(field, errorKey, errorMessage) {
+		if (!this.isCheckedField(field)) return;
+		delete valid.error[errorKey];
 		var value = this.getParameter(field);
 		if (value == null || "" == value.replace(/\s/ig, "")) {
 			this.addError(errorKey, errorMessage);
@@ -133,6 +156,8 @@ function Validator(selector, handlerError) {
 			this.addError(errorKey, errorMessage);
 	};
 	valid.validateDate = function(field, errorKey, errorMessage) {
+		if (!this.isCheckedField(field)) return;
+		delete valid.error[errorKey];
 		var value = this.getParameter(field);
 		if (value == null || "" == value.replace(/\s/ig, "")) {
 			this.addError(errorKey, errorMessage);
@@ -145,6 +170,8 @@ function Validator(selector, handlerError) {
 		}
 	};
 	valid.validateDate = function(field, min, max, errorKey, errorMessage) {
+		if (!this.isCheckedField(field)) return;
+		delete valid.error[errorKey];
 		var value = this.getParameter(field);
 		if (value == null || "" == value.replace(/\s/ig, "")) {
 			this.addError(errorKey, errorMessage);
@@ -160,28 +187,40 @@ function Validator(selector, handlerError) {
 		}
 	};
 	valid.validateEqualField = function(field_1, field_2, errorKey, errorMessage) {
+		if (!this.isCheckedField(field_2)) return;
+		delete valid.error[errorKey];
 		var value_1 = this.getParameter(field_1);
 		var value_2 = this.getParameter(field_2);
 		if (value_1 == null || value_2 == null || value_1 != value_2)
 			this.addError(errorKey, errorMessage);
 	};
 	valid.validateEqualString = function(s1, s2, errorKey, errorMessage) {
+		delete valid.error[errorKey];
 		if (s1 == null || s2 == null || s1 != s2)
 			this.addError(errorKey, errorMessage);
 	};
 	valid.validateEqualInteger = function(i1, i2, errorKey, errorMessage) {
+		delete valid.error[errorKey];
 		this.validateEqualString(i1, i2, errorKey, errorMessage);
 	};
 	valid.validateEmail = function(field, errorKey, errorMessage) {
+		if (!this.isCheckedField(field)) return;
+		delete valid.error[errorKey];
 		this.validateRegex(field, emailAddressPattern, false, errorKey, errorMessage);
 	};
 	valid.validateMobile = function(field, errorKey, errorMessage) {
+		if (!this.isCheckedField(field)) return;
+		delete valid.error[errorKey];
 		this.validateRegex(field, mobileNumberPattern, false, errorKey, errorMessage);
 	};
 	valid.validateUrl = function(field, errorKey, errorMessage) {
+		if (!this.isCheckedField(field)) return;
+		delete valid.error[errorKey];
 		this.validateRegex(field, urlAddressPattern, false, errorKey, errorMessage);
 	};
 	valid.validateRegex = function(field, regExpression, isCaseSensitive, errorKey, errorMessage) {
+		if (!this.isCheckedField(field)) return;
+		delete valid.error[errorKey];
 		var value = this.getParameter(field);
 		if (value == null || "" == value.replace(/\s/ig, "")) {
 			this.addError(errorKey, errorMessage);
@@ -198,6 +237,8 @@ function Validator(selector, handlerError) {
 		}
 	};
 	valid.validateString = function(field, minLen, maxLen, errorKey, errorMessage) {
+		if (!this.isCheckedField(field)) return;
+		delete valid.error[errorKey];
 		var value = this.getParameter(field);
 		if (value == null || "" == value.replace(/\s/ig, "")) {
 			this.addError(errorKey, errorMessage);
@@ -207,6 +248,8 @@ function Validator(selector, handlerError) {
 			this.addError(errorKey, errorMessage);
 	};
 	valid.validateBoolean = function(field, errorKey, errorMessage) {
+		if (!this.isCheckedField(field)) return;
+		delete valid.error[errorKey];
 		var value = this.getParameter(field);
 		if (value == null || "" == value.replace(/\s/ig, "")) {
 			this.addError(errorKey, errorMessage);
@@ -224,34 +267,64 @@ function Validator(selector, handlerError) {
 
 (function($){
     $.fn.extend({
-        validator: function(name, success, handlerError){
+        validator: function(arg1, arg2, arg3, arg4){
             var selector = this.selector;
-            $(this.selector).submit(function(){
-            	if (handlerError == undefined) {
-            		handlerError = success;
-            		success = name;
-            		for(var temp in Validate) {
-            			name = temp;
-            			break;
-            		}
+            // default parameter
+        	var parameter = {forthwith: false};
+        	for(var temp in Validate) {
+    			parameter.name = temp;
+    			break;
+    		}
+        	// checked parameter
+        	var args = [arg1, arg2, arg3, arg4], flag;
+        	for (var i in args) {
+				switch (typeof(args[i])) {
+				case "string":
+					parameter.name = args[i];
+					break;
+				case "boolean":
+					parameter.forthwith = args[i];
+					break;
+				case "function":
+					if (flag) parameter.handlerError = args[i];
+					else parameter.success = args[i];
+					flag = true;
+					break;
 				}
-                var validator = new Validate[name](selector, handlerError);
-                try {
-                    validator.validate();
-                } catch (e) { }
-                if(validator.invalid) {
-                    try {
-                        validator.handlerError(validator.error);
+			}
+        	var validator = new Validate[parameter.name](selector, parameter.handlerError);
+        	if (parameter.forthwith) {
+        		var checkFunc = function () {
+        			try {
+        				validator.setCheckedField(this.name);
+                        validator.validate();
                     } catch (e) { }
-                    return false;
-                }
-                var handler = false;
-                try {
-                    handler = success(handlerError);
-                } catch (e) { }
-                if(handler != undefined && handler == false);
-                    return false;
+                    if(validator.invalid) {
+                        try {
+                            validator.handlerError(validator.error);
+                        } catch (e) { }
+                    }
+        		};
+        		$(selector).find("input[type=text], input[type=password], textarea").keyup(checkFunc);
+			}
+            $(this.selector).submit(function(){
+            	try {
+            		validator.setCheckedField(null);
+            		validator.validate();
+            	} catch (e) { }
+            	if(validator.invalid) {
+            		try {
+            			validator.handlerError(validator.error);
+            		} catch (e) { }
+            		return false;
+            	}
+            	var handler = false;
+            	try {
+            		handler = parameter.success(parameter.handlerError);
+            	} catch (e) { }
+            	if(handler != undefined && handler == false);
+            		return false;
             });
         }
-    });
+	});
 })(jQuery);

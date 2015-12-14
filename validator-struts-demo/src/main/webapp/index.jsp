@@ -34,7 +34,7 @@
 					for (var name in error) {
 						$("input[name=" + name + "]").after('<span class="err">' + error[name] + '</span>');
 					}
-				});
+				}, true);
 			});
 		</script>
 	</head>
