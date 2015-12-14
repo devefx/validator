@@ -305,7 +305,8 @@ function Validator(selector, handlerError) {
                         } catch (e) { }
                     }
         		};
-        		$(selector).find("input[type=text], input[type=password], textarea").keyup(checkFunc);
+        		var widget = $(selector).find("input[type=text], input[type=password], textarea");
+        		widget.keyup(checkFunc); widget.blur(checkFunc);
 			}
             $(this.selector).submit(function(){
             	try {
