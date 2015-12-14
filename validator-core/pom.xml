@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.devefx</groupId>
 	<artifactId>validator</artifactId>
-	<version>1.0.1-RELEASE</version>
+	<version>1.0.2-RELEASE</version>
 	<name>org.devefx.validator</name>
 	<description>Jave Web Validator Framework</description>
 	<url>https://github.com/devefx/validator</url>
