@@ -8,12 +8,7 @@
 		<dependency>
 			<groupId>org.devefx</groupId>
 			<artifactId>validator</artifactId>
-			<version>1.0.1-RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.struts</groupId>
-			<artifactId>struts2-core</artifactId>
-			<version>2.3.24</version>
+			<version>1.0.2-RELEASE</version>
 		</dependency>
 		<dependency>
 	  		<groupId>javax.servlet</groupId>
@@ -21,6 +16,11 @@
 	  		<version>3.1.0</version>
 	  		<scope>provided</scope>
 	  	</dependency>
+		<dependency>
+			<groupId>org.apache.struts</groupId>
+			<artifactId>struts2-core</artifactId>
+			<version>2.3.24</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<pluginManagement>

@@ -1,8 +1,8 @@
 package org.devefx.validator.core;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -18,11 +18,8 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
-import org.apache.velocity.app.VelocityEngine;
-import org.codehaus.jackson.map.ObjectMapper;
+import org.devefx.validator.common.JsonResult;
+import org.devefx.validator.common.StringUtils;
 
 public abstract class Validator {
 	
@@ -77,14 +74,13 @@ public abstract class Validator {
 	}
 	
 	protected void renderJSONError() {
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("success", !this.invalid);
-		map.put("error", getError());
-		ObjectMapper mapper = new ObjectMapper();
+		JsonResult jsonResult = new JsonResult();
+		jsonResult.put("success", !this.invalid);
+		jsonResult.put("error", getError());
 		try {
 			response.setContentType("text/html;charset=UTF-8");
 			PrintWriter out = response.getWriter();
-			mapper.writeValue(out, map);
+			out.print(jsonResult.toString());
 			out.flush();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -97,20 +93,21 @@ public abstract class Validator {
 				Validator validator = getClass().newInstance();
 				validator.scriptMode = true;
 				validator.validate(null, null);
+
+				String token = "";
+				StringBuffer script = new StringBuffer();
+				for (String s : validator.javascript) {
+					script.append(token);
+					script.append("\t\t\tthis.");
+					script.append(s);
+					token = "\n";
+				}
+				Map<String, Object> parameter = new HashMap<String, Object>();
+				parameter.put("script", script.toString());
+				parameter.put("name", getClass().getSimpleName());
 				
-				VelocityEngine velocityEngine = new VelocityEngine();
-				velocityEngine.setProperty(Velocity.FILE_RESOURCE_LOADER_PATH, getClass().getResource("/").getPath());
-				velocityEngine.setProperty(Velocity.RESOURCE_LOADER, "class");
-				velocityEngine.setProperty("class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
-				
-				VelocityContext velocityContext = new VelocityContext();
-				velocityContext.put("scripts", validator.javascript);
-				velocityContext.put("name", getClass().getSimpleName());
-				Template template = velocityEngine.getTemplate("validator.vm");
-				
-				StringWriter writer = new StringWriter();
-				template.merge(velocityContext, writer);
-				this.scriptText = writer.toString();
+				InputStream is = getClass().getClassLoader().getResourceAsStream("validator.vm");
+				this.scriptText = StringUtils.format(StringUtils.reader(is, "utf-8"), parameter);
 			}
 		} catch (InstantiationException e) {
 			e.printStackTrace();

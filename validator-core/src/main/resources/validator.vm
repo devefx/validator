@@ -2,12 +2,10 @@
 	if (window.Validate == undefined) {
 		window.Validate = {};
 	}
-	window.Validate["$name"] = function(selector, handlerError) {
+	window.Validate["${name}"] = function(selector, handlerError) {
 		var validator = new Validator(selector, handlerError);
 		validator.validate = function() {
-#foreach($script in $scripts)
-			this.$script
-#end
+${script}
 		};
 		return validator;
 	}
