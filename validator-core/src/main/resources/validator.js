@@ -54,6 +54,7 @@ function Validator(selector, handlerError) {
 	var DEFAULT_DATE_PATTERN = "yyyy-MM-dd";
 	var emailAddressPattern = "\\b(^['_A-Za-z0-9-]+(\\.['_A-Za-z0-9-]+)*@([A-Za-z0-9-])+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z0-9]{2,})|(\\.[A-Za-z0-9]{2,}\\.[A-Za-z0-9]{2,}))$)\\b";
 	var mobileNumberPattern = "^(0|86|17951)?(13[0-9]|15[0-9]|17[678]|18[0-9]|14[57])[0-9]{8}$";
+	var emailAddressManyPattern = "^((['_A-Za-z0-9-]+(\\.['_A-Za-z0-9-]+)*@([A-Za-z0-9-])+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z0-9]{2,})|(\\.[A-Za-z0-9]{2,}\\.[A-Za-z0-9]{2,}));)+)$";
 	var urlAddressPattern = "";
 	
 	valid.setShortCircuit = function(shortCircuit) {
@@ -207,6 +208,19 @@ function Validator(selector, handlerError) {
 		if (!this.isCheckedField(field)) return;
 		delete valid.error[errorKey];
 		this.validateRegex(field, emailAddressPattern, false, errorKey, errorMessage);
+	};
+	valid.validateEmailMany = function(field, errorKey, errorMessage) {
+		if (!this.isCheckedField(field)) return;
+		delete valid.error[errorKey];
+		var value = this.getParameter(field);
+		if (value == null || "" == value.replace(/\s/ig, "")) {
+			this.addError(errorKey, errorMessage);
+			return ;
+		}
+		var reg = new RegExp(emailAddressManyPattern, "i");
+		if (!reg.test(/;$/.test(value) ? value : value + ";")) {
+			this.addError(errorKey, errorMessage);
+		}
 	};
 	valid.validateMobile = function(field, errorKey, errorMessage) {
 		if (!this.isCheckedField(field)) return;

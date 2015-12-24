@@ -36,6 +36,7 @@ public abstract class Validator {
 	private static final String DEFAULT_DATE_PATTERN = "yyyy-MM-dd";
 	private static final String emailAddressPattern = "\\b(^['_A-Za-z0-9-]+(\\.['_A-Za-z0-9-]+)*@([A-Za-z0-9-])+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z0-9]{2,})|(\\.[A-Za-z0-9]{2,}\\.[A-Za-z0-9]{2,}))$)\\b";
 	private static final String mobileNumberPattern = "^(0|86|17951)?(13[0-9]|15[0-9]|17[678]|18[0-9]|14[57])[0-9]{8}$";
+	private static final String emailAddressManyPattern = "^((['_A-Za-z0-9-]+(\\.['_A-Za-z0-9-]+)*@([A-Za-z0-9-])+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z0-9]{2,})|(\\.[A-Za-z0-9]{2,}\\.[A-Za-z0-9]{2,}));)+)$";
 	
 	protected void setShortCircuit(boolean shortCircuit) {
 		if (scriptMode) {
@@ -361,6 +362,22 @@ public abstract class Validator {
 			return;
 		}
 		validateRegex(field, emailAddressPattern, false, errorKey, errorMessage);
+	}
+	
+	protected void validateEmailMany(String field, String errorKey, String errorMessage) {
+		if (scriptMode) {
+			addScript(String.format("validateEmailMany('%s', '%s', '%s');", field, errorKey, errorMessage));
+			return;
+		}
+		String value = request.getParameter(field);
+        if (value == null) {
+        	addError(errorKey, errorMessage);
+        	return ;
+        }
+        Pattern pattern = Pattern.compile(emailAddressManyPattern, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(value.endsWith(";") ? value : value + ";");
+        if (!matcher.matches())
+        	addError(errorKey, errorMessage);
 	}
 	
 	protected void validateMobile(String field, String errorKey, String errorMessage) {
