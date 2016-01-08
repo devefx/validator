@@ -3,8 +3,6 @@ package org.devefx.validator.common;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * 字符串帮助类
@@ -19,15 +17,29 @@ public class StringUtils {
 	 * @return String
 	 */
 	public static String format(String text, Map<String, Object> parameter) {
-		StringBuffer sb = new StringBuffer(text.length());
-		Pattern pattern = Pattern.compile("\\$\\{([a-zA-Z_]+)\\}");
-		Matcher matcher = pattern.matcher(text);
-		while (matcher.find()) {
-			Object value = parameter.get(matcher.group(1));
-			matcher.appendReplacement(sb, value == null ? "" : value.toString());
+		final String OPEN = "${";
+		final String CLOSE = "}";
+		
+		String newText = text;
+		if (text != null && parameter != null) {
+			int start = newText.indexOf(OPEN);
+			int end = newText.indexOf(CLOSE, start);
+			
+			while (start > -1 && end > start) {
+				String prepend = newText.substring(0, start);
+				String append = newText.substring(end + CLOSE.length());
+				String propName = newText.substring(start + OPEN.length(), end);
+				Object propValue = parameter.get(propName);
+				if (propValue == null) {
+					newText = prepend + propName + append;
+				} else {
+					newText = prepend + propValue + append;
+				}
+				start = newText.indexOf(OPEN);
+				end = newText.indexOf(CLOSE, start);
+			}
 		}
-		matcher.appendTail(sb);
-		return sb.toString();
+		return newText;
 	}
 	/**
 	 * 读取InputStream中的文本，方法将自动关闭流
