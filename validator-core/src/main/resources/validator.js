@@ -310,6 +310,7 @@ function Validator(selector, handlerError) {
         	if (parameter.forthwith) {
         		var checkFunc = function () {
         			try {
+						validator.invalid = false;
         				validator.setCheckedField(this.name);
                         validator.validate();
                     } catch (e) { }
@@ -324,6 +325,7 @@ function Validator(selector, handlerError) {
 			}
             $(this.selector).submit(function(){
             	try {
+					validator.invalid = false;
             		validator.setCheckedField(null);
             		validator.validate();
             	} catch (e) { }
