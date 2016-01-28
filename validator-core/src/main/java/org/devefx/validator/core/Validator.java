@@ -460,6 +460,18 @@ public abstract class Validator {
 		addError(errorKey, errorMessage);
 	}
 	
+	protected void validateHandler(Handler handler, String errorKey, String errorMessage) {
+		if (scriptMode) {
+			return;
+		}
+		try {
+			if (!handler.validate()) {
+				addError(errorKey, errorMessage);
+			}
+		} catch (Exception e) {
+			addError(errorKey, errorMessage);
+		}
+	}
 	/*protected void validateToken(String tokenName, String errorKey, String errorMessage) {
 		
 	}
