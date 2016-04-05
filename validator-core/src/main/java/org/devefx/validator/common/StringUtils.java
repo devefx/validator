@@ -1,7 +1,10 @@
 package org.devefx.validator.common;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.Map;
 
 /**
@@ -10,6 +13,8 @@ import java.util.Map;
  * @date： 2015-12-18 上午10:30:09
  */
 public class StringUtils {
+	
+	private static final String lineSeparator = System.getProperty("line.separator", "\n");
 	/**
 	 * 文本中${name}的形式将被替换成map中key=name的value
 	 * @param text
@@ -47,24 +52,31 @@ public class StringUtils {
 	 * @param charsetName
 	 * @return String
 	 */
-	public static String reader(InputStream is, String charsetName) {
+	public static String reader(InputStream is, String charsetName) throws IOException {
 		if (is != null) {
-			StringBuffer sb = new StringBuffer();
+			String line = null;
+			Reader reader = null;
+			BufferedReader bufferedReader = null;
+			StringBuffer buf = new StringBuffer();
 			try {
-				int off = 0, len;
-				byte[] bytes = new byte[1024];
-				while ((len = is.read(bytes, off, 1024)) != -1) {
-					sb.append(new String(bytes, 0, len, charsetName));
-				}
-			} catch (IOException e) {
-				if (is != null) {
-					try {
-						is.close();
-					} catch (IOException e2) {
+				reader = new InputStreamReader(is);
+				bufferedReader = new BufferedReader(reader);
+				while ((line = bufferedReader.readLine()) != null) {
+					if (buf.length() != 0) {
+						buf.append(lineSeparator);
 					}
+					buf.append(line);
 				}
+			} finally {
+				if (bufferedReader != null) {
+					bufferedReader.close();
+				}
+				if (reader != null) {
+					reader.close();
+				}
+				is.close();
 			}
-			return sb.toString();
+			return buf.toString();
 		}
 		return null;
 	}

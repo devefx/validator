@@ -110,6 +110,8 @@ public abstract class Validator {
 				InputStream is = getClass().getClassLoader().getResourceAsStream("validator.vm");
 				this.scriptText = StringUtils.format(StringUtils.reader(is, "utf-8"), parameter);
 			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
