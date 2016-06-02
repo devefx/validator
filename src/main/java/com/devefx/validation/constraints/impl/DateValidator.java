@@ -4,6 +4,7 @@ import com.devefx.validation.Script;
 import com.devefx.validation.annotation.BindScript;
 import com.devefx.validation.kit.DateKit;
 import com.devefx.validation.constraints.FieldValidator;
+import com.devefx.validation.kit.StrKit;
 import com.devefx.validation.script.JavaScript;
 
 import javax.servlet.http.HttpServletRequest;
@@ -58,11 +59,11 @@ public class DateValidator extends FieldValidator implements Script {
     @Override
     public boolean isValid(HttpServletRequest request) throws Exception {
         String value = request.getParameter(field);
-        if (value != null) {
+        if (!StrKit.isEmpty(value)) {
             Date date = DateKit.parse(pattern != null ? pattern : DEFAULT_DATE_PATTERN, value);
             return !(date.before(minDate) || date.after(maxDate));
         }
-        return false;
+        return true;
     }
 
     @Override

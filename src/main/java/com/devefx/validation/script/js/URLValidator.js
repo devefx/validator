@@ -2,7 +2,7 @@ function URLValidator(field, min, max, errorCode, errorMessage) {
     FieldValidator.apply(this, [field, errorCode, errorMessage]);
     this.isValid = function (request) {
         var value = request.getParameter(field);
-        if (value != null) {
+        if (!isEmpty(value)) {
             var regex = "^((https|http|ftp|rtsp|mms)?://)"
                 + "?(([0-9a-z_!~*'().&=+$%-]+: )?[0-9a-z_!~*'().&=+$%-]+@)?"
                 + "(([0-9]{1,3}\.){3}[0-9]{1,3}"
@@ -15,6 +15,6 @@ function URLValidator(field, min, max, errorCode, errorMessage) {
                 + "(/[0-9a-z_!~*'().;?:@&=+$,%#-]+)+/?)$";
             return new RegExp(regex).test(value);
         }
-        return false;
+        return true;
     };
 }

@@ -29,7 +29,7 @@ public class EqualFieldValidator extends FieldValidator implements Script {
     public boolean isValid(HttpServletRequest request) {
         String value1 = request.getParameter(field);
         String value2 = request.getParameter(field2);
-        if (value1 != null && value2 != null && value1.equals(value2)) {
+        if ((value1 == value2) || (value1 != null && value2 != null && value1.equals(value2))) {
             return true;
         }
         return false;

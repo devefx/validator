@@ -3,6 +3,7 @@ package com.devefx.validation.constraints.impl;
 import com.devefx.validation.Script;
 import com.devefx.validation.annotation.BindScript;
 import com.devefx.validation.constraints.FieldValidator;
+import com.devefx.validation.kit.StrKit;
 import com.devefx.validation.script.JavaScript;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,7 +38,7 @@ public class EmailValidator extends FieldValidator implements Script {
     @Override
     public boolean isValid(HttpServletRequest request) {
         String value = request.getParameter(field);
-        if (value != null) {
+        if (!StrKit.isEmpty(value)) {
             if (multi) {
                 if (!value.endsWith(";")) {
                     value = value + ";";
@@ -48,7 +49,7 @@ public class EmailValidator extends FieldValidator implements Script {
             Matcher matcher = emailPattern.matcher(value);
             return matcher.matches();
         }
-        return false;
+        return true;
     }
 
     @Override

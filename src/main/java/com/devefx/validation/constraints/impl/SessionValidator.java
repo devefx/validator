@@ -1,6 +1,7 @@
 package com.devefx.validation.constraints.impl;
 
 import com.devefx.validation.constraints.FieldValidator;
+import com.devefx.validation.kit.StrKit;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -21,10 +22,10 @@ public class SessionValidator extends FieldValidator {
     @Override
     public boolean isValid(HttpServletRequest request) {
         String value = request.getParameter(field);
-        if (value != null) {
+        if (!StrKit.isEmpty(value)) {
             HttpSession session = request.getSession();
             return value.equals(session.getAttribute(sessionKey));
         }
-        return false;
+        return true;
     }
 }

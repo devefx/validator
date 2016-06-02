@@ -3,6 +3,7 @@ package com.devefx.validation.constraints.impl;
 import com.devefx.validation.Script;
 import com.devefx.validation.annotation.BindScript;
 import com.devefx.validation.constraints.FieldValidator;
+import com.devefx.validation.kit.StrKit;
 import com.devefx.validation.script.JavaScript;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,13 +30,16 @@ public class SizeValidator extends FieldValidator implements Script {
 
     @Override
     public boolean isValid(HttpServletRequest request) {
-        try {
-            String value = request.getParameter(field);
-            Long val = Long.parseLong(value);
-            return val >= min && val <= max;
-        } catch (NumberFormatException e) {
+        String value = request.getParameter(field);
+        if (!StrKit.isEmpty(value)) {
+            try {
+                Long val = Long.parseLong(value);
+                return val >= min && val <= max;
+            } catch (NumberFormatException e) {
+                return false;
+            }
         }
-        return false;
+        return true;
     }
 
     @Override

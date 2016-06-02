@@ -3,6 +3,7 @@ package com.devefx.validation.constraints.impl;
 import com.devefx.validation.Script;
 import com.devefx.validation.annotation.BindScript;
 import com.devefx.validation.constraints.FieldValidator;
+import com.devefx.validation.kit.StrKit;
 import com.devefx.validation.script.JavaScript;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,8 +27,11 @@ public class BooleanValidator extends FieldValidator implements Script {
     @Override
     public boolean isValid(HttpServletRequest request) {
         String value = request.getParameter(field);
-        return "1".equals(value) || "0".equals(value) ||
-                "true".equalsIgnoreCase(value) || "false".equalsIgnoreCase(value);
+        if (!StrKit.isEmpty(value)) {
+            return "1".equals(value) || "0".equals(value) ||
+                    "true".equalsIgnoreCase(value) || "false".equalsIgnoreCase(value);
+        }
+        return false;
     }
 
     @Override

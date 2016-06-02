@@ -38,6 +38,14 @@ function ValidatorManager() {
     };
 }
 
+function isEmpty(value) {
+    return !value || value.length == 0;
+}
+
+function isBank(value) {
+    return !value || value.replace(/\s/ig, "").length == 0;
+}
+
 function Validator() {
     // Property
     this.validators = [];

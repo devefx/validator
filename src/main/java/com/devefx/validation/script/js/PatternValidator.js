@@ -2,10 +2,10 @@ function PatternValidator(field, regExpression, isCaseSensitive, errorCode, erro
     FieldValidator.apply(this, [field, errorCode, errorMessage]);
     this.isValid = function (request) {
         var value = request.getParameter(field);
-        if (value != null) {
+        if (!isEmpty(value)) {
             var reg = isCaseSensitive ? new RegExp(regExpression) : new RegExp(regExpression, "i");
             return reg.test(value);
         }
-        return false;
+        return true;
     };
 }

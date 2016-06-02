@@ -3,6 +3,7 @@ package com.devefx.validation.constraints.impl;
 import com.devefx.validation.Script;
 import com.devefx.validation.annotation.BindScript;
 import com.devefx.validation.constraints.FieldValidator;
+import com.devefx.validation.kit.StrKit;
 import com.devefx.validation.script.JavaScript;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,12 +27,14 @@ public class IntegerValidator extends FieldValidator implements Script {
     @Override
     public boolean isValid(HttpServletRequest request) throws Exception {
         String value = request.getParameter(field);
-        try {
-            Integer.parseInt(value);
-            return true;
-        } catch (Exception e) {
-            return false;
+        if (!StrKit.isEmpty(value)) {
+            try {
+                Integer.parseInt(value);
+            } catch (Exception e) {
+                return false;
+            }
         }
+        return true;
     }
 
     @Override

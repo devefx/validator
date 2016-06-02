@@ -3,6 +3,7 @@ package com.devefx.validation.constraints.impl;
 import com.devefx.validation.Script;
 import com.devefx.validation.annotation.BindScript;
 import com.devefx.validation.constraints.FieldValidator;
+import com.devefx.validation.kit.StrKit;
 import com.devefx.validation.script.JavaScript;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,12 +27,14 @@ public class FloatValidator extends FieldValidator implements Script {
     @Override
     public boolean isValid(HttpServletRequest request) throws Exception {
         String value = request.getParameter(field);
-        try {
-            Float.parseFloat(value);
-            return true;
-        } catch (Exception e) {
-            return false;
+        if (!StrKit.isEmpty(value)) {
+            try {
+                Float.parseFloat(value);
+            } catch (Exception e) {
+                return false;
+            }
         }
+        return true;
     }
 
     @Override

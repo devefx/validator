@@ -24,4 +24,12 @@ public class StrKit {
         }
         return str;
     }
+
+    public static boolean isBlank(String str) {
+        return str == null || "".equals(str.trim());
+    }
+
+    public static boolean isEmpty(String str) {
+        return str == null || "".equals(str);
+    }
 }

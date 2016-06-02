@@ -1,12 +1,11 @@
 function SizeValidator(field, min, max, errorCode, errorMessage) {
     FieldValidator.apply(this, [field, errorCode, errorMessage]);
     this.isValid = function (request) {
-        try {
-            var value = request.getParameter(field);
+        var value = request.getParameter(field);
+        if (!isEmpty(value)) {
             var val = parseInt(value);
-            return val >= min && val <= max;
-        } catch (e) {
+            return !isNaN(val) && val >= min && val <= max;
         }
-        return false;
+        return true;
     };
 }

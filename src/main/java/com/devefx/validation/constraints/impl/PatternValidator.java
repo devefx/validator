@@ -3,6 +3,7 @@ package com.devefx.validation.constraints.impl;
 import com.devefx.validation.Script;
 import com.devefx.validation.annotation.BindScript;
 import com.devefx.validation.constraints.FieldValidator;
+import com.devefx.validation.kit.StrKit;
 import com.devefx.validation.script.JavaScript;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,11 +36,11 @@ public class PatternValidator extends FieldValidator implements Script {
     @Override
     public boolean isValid(HttpServletRequest request) {
         String value = request.getParameter(field);
-        if (value != null) {
+        if (!StrKit.isEmpty(value)) {
             Matcher matcher = pattern.matcher(value);
             return matcher.matches();
         }
-        return false;
+        return true;
     }
 
     @Override
