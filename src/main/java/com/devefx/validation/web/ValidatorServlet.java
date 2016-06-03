@@ -74,13 +74,9 @@ public class ValidatorServlet extends HttpServlet {
 
     private String buildScript() throws IOException {
         if (script == null) {
-            boolean first = true;
             StringBuffer buf = new StringBuffer(ResKit.getResourceAsString(VALIDATOR_PATH));
             for (Map.Entry<String, String> entry : modules.getScripts().entrySet()) {
-                if (first == false) {
-                    buf.append("\n");
-                }
-                first = false;
+                buf.append("\n");
                 buf.append(entry.getValue());
             }
             script = new SoftReference<String>(buf.toString());
