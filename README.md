@@ -13,3 +13,9 @@ Validator的特性：
 * 将Validate与Controller分离
 * 统一验证规范
 * 支持自定义验证规则
+
+使用教程：
+
+&nbsp;&nbsp;&nbsp;&nbsp;第一篇：<a href="http://blog.csdn.net/devefx/article/details/51565139" target="_blank">使用Validator做SpringMVC的验证框架 - 配置SpringMVC环境</a>
+&nbsp;&nbsp;&nbsp;&nbsp;第二篇：<a href="http://blog.csdn.net/devefx/article/details/51567533" target="_blank">使用Validator做SpringMVC的验证框架 - 使用Validator</a>
+&nbsp;&nbsp;&nbsp;&nbsp;第三篇：<a href="http://blog.csdn.net/devefx/article/details/51576672" target="_blank">使用Validator做SpringMVC的验证框架 - Validator前端验证</a>
