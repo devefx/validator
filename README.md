@@ -20,4 +20,4 @@ Validator的特性：
 &nbsp;&nbsp;&nbsp;&nbsp;第二篇：<a href="http://blog.csdn.net/devefx/article/details/51567533" target="_blank">使用Validator做SpringMVC的验证框架 - 使用Validator</a><br/>
 &nbsp;&nbsp;&nbsp;&nbsp;第三篇：<a href="http://blog.csdn.net/devefx/article/details/51576672" target="_blank">使用Validator做SpringMVC的验证框架 - Validator前端验证</a><br/>
 
-教程源码：<a href="http://download.csdn.net/detail/devefx/9540183" target="_blank">下载地址</a>
+教程源码：<a href="http://download.csdn.net/detail/devefx/9542650" target="_blank">下载地址</a>
