@@ -28,7 +28,6 @@ class Config {
         modules.add(NotNullValidator.class);
         modules.add(NullValidator.class);
         modules.add(PatternValidator.class);
-        //modules.add(SessionValidator.class);
         modules.add(SizeValidator.class);
         modules.add(URLValidator.class);
     }

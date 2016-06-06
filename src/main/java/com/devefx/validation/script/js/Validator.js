@@ -26,7 +26,7 @@ function ValidatorManager() {
             for (var key in this.validatorMap) {
                 count++;
                 if (count > 1) {
-                    throw new Error("// TODO");
+                    throw new Error("NoUniqueValidatorDefinitionException");
                 }
                 name = key;
             }
@@ -48,7 +48,7 @@ function isBank(value) {
 
 function Validator() {
     // Property
-    this.validators = [];
+    this.validatorList = [];
     this.invalid = false;
     this.shortCircuit = false;
     this.errors = {};
@@ -57,38 +57,69 @@ function Validator() {
         this.shortCircuit = shortCircuit;
     };
     this.add = function (constraintValidator) {
-        this.validators.push(constraintValidator);
+        this.validatorList.push(constraintValidator);
     };
     this.reset = function () {
         this.invalid = false;
         this.errors = {};
     };
-    this.process = function (request) {
-        for (var i = 0; i < this.validators.length; i++) {
-            var validator = this.validators[i];
-            if (!validator.isValid(request)) {
-                this.invalid = true;
-                var error = validator.error;
-                if (!this.errors.hasOwnProperty(error.code)) {
-                    this.errors[error.code] = error.message;
-                }
-                if (this.shortCircuit) {
-                    break;
-                }
-            }
+    this.putError = function (error) {
+        this.invalid = true;
+        if (!this.errors.hasOwnProperty(error.code)) {
+            this.errors[error.code] = error.message;
         }
-        return !this.invalid;
     };
-    this.checkField = function (request, field) {
-        for (var i = 0; i < this.validators.length; i++) {
-            var validator = this.validators[i];
-            if (validator.field == field && !validator.isValid(request)) {
-                return validator.error;
+    this.process = function (request, callback, name) {
+        // init
+        var self = this;
+        var validatorList = self.validatorList;
+        var shortCircuit = self.shortCircuit;
+        var validateFull = (typeof(name) == "undefined");
+        var isSync = true;
+        var index = 0;
+        var length = validatorList.length;
+        var error = null;
+        // process
+        var process = function (valid) {
+            if (!valid) {
+                var validator = validatorList[index-1];
+                if (validateFull) {
+                    self.putError(validator.error);
+                    return;
+                }
+                error = validator.error;
             }
-        }
-        return null;
+        };
+        // control
+        var control = {
+            async: function () {
+                isSync = false;
+            },
+            sync: function (valid) {
+                if (!isSync) {
+                    isSync = true;
+                    process(valid);
+                }
+                while (index < length && (validateFull || error == null)) {
+                    var validator = validatorList[index ++];
+                    if (validateFull || validator.field == name) {
+                        valid = validator.isValid(request, this);
+                        if (isSync) {
+                            process(valid);
+                            if (shortCircuit || (!validateFull && !valid)) {
+                                break;
+                            }
+                        } else return;
+                    }
+                }
+                if (validateFull) {
+                    return callback(!self.invalid);
+                }
+                callback(error);
+            }
+        };
+        control.sync();
     };
-
 }
 /**
  * SimpleDateFormat
@@ -169,12 +200,16 @@ function Request(form) {
             var selector = this;
             var request = new Request(selector);
             selector.submit(function () {
+                var autoSubmit = false;
                 validator.reset();
-                if (validator.process(request)) {
-                    return true == params.success();
-                }
-                params.error(validator.errors, null);
-                return false;
+                validator.process(request, function (valid) {
+                    if (valid) {
+                        autoSubmit = params.success();
+                        return;
+                    }
+                    params.error(validator.errors, null);
+                });
+                return autoSubmit == true;
             });
             // auto validator
             selector.find(":input[name]").each(function (i, input) {
@@ -200,7 +235,10 @@ function Request(form) {
                         }
                 }
                 $(input).bind(bindEvent, function() {
-                    params.error(validator.checkField(request, this.name), this.name);
+                    var name = this.name;
+                    validator.process(request, function (error) {
+                        params.error(error, name);
+                    }, name);
                 });
             });
         },
