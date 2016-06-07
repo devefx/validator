@@ -5,8 +5,6 @@ import com.devefx.validation.annotation.BindScript;
 import com.devefx.validation.kit.ResKit;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.Writer;
 import java.util.*;
 
 /**
