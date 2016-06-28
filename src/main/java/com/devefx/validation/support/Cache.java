@@ -17,18 +17,18 @@ public class Cache {
     protected Map<Method, SoftReference<Validator>> cache = new HashMap<Method, SoftReference<Validator>>();
 
     public Validator get(Method method) throws Exception {
+        Validator validator;
         SoftReference<Validator> reference = cache.get(method);
-        if (reference == null) {
+        if (reference == null || (validator = reference.get()) == null) {
             if (method.isAnnotationPresent(Valid.class)) {
                 Valid valid = method.getAnnotation(Valid.class);
-                Validator validator = valid.value().newInstance();
+                validator = valid.value().newInstance();
                 validator.setup();
                 cache.put(method, new SoftReference<Validator>(validator));
                 return validator;
             }
             return null;
         }
-        Validator validator = reference.get();
         validator.reset();
         return validator;
     }
