@@ -8,7 +8,7 @@ Validator的特性：
 
 * 前后端验证框架，设计精巧、使用简单
 * 遵循OCP原则，强大的扩展性
-* 支持SpringMVC、Struts2
+* 支持SpringMVC、Struts2、Servlet
 * 自动生成JavaScript前端验证代码
 * 将Validate与Controller分离
 * 统一验证规范
@@ -25,4 +25,5 @@ Validator的特性：
 
 #更新日志
 
-- 2016/6/28  修复Cache弱引用对象被GC回收导致NullPoint异常
+- 2016/06/28  修复Cache弱引用对象被GC回收导致NullPoint异常
+- 2016/09/05  增加对原始Servlet的验证支持
