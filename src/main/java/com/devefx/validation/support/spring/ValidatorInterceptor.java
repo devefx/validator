@@ -1,17 +1,12 @@
 package com.devefx.validation.support.spring;
 
 import com.devefx.validation.Validator;
-import com.devefx.validation.annotation.Valid;
 import com.devefx.validation.support.Cache;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.lang.ref.SoftReference;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * ValidatorInterceptor

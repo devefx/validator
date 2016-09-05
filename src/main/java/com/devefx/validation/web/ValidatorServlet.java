@@ -1,9 +1,6 @@
 package com.devefx.validation.web;
 
-import com.devefx.validation.ConstraintValidator;
 import com.devefx.validation.Validator;
-import com.devefx.validation.annotation.BindScript;
-import com.devefx.validation.constraints.impl.*;
 import com.devefx.validation.kit.ResKit;
 import com.devefx.validation.web.config.Modules;
 import com.devefx.validation.web.config.Routes;
@@ -16,8 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.lang.ref.SoftReference;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**

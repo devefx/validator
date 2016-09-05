@@ -2,11 +2,6 @@ package com.devefx.validation.constraints;
 
 import com.devefx.validation.ConstraintValidator;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 /**
  * FieldValidator
  * Created by YYQ on 2016/5/26.

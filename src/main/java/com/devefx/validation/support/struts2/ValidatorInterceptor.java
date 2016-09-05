@@ -10,10 +10,7 @@ import com.opensymphony.xwork2.interceptor.MethodFilterInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.lang.ref.SoftReference;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * ValidatorInterceptor
@@ -21,7 +18,8 @@ import java.util.Map;
  */
 public class ValidatorInterceptor extends MethodFilterInterceptor {
 
-    private static final String HTTP_REQUEST = "com.opensymphony.xwork2.dispatcher.HttpServletRequest";
+	private static final long serialVersionUID = -6217418023463824630L;
+	private static final String HTTP_REQUEST = "com.opensymphony.xwork2.dispatcher.HttpServletRequest";
     private static final String HTTP_RESPONSE = "com.opensymphony.xwork2.dispatcher.HttpServletResponse";
 
     private final Cache cache = new Cache();

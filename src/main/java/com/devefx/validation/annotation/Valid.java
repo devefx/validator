@@ -9,7 +9,7 @@ import java.lang.annotation.*;
  * Created by YYQ on 2016/5/27.
  */
 @Inherited
-@Target(ElementType.METHOD)
+@Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Valid {
     Class<? extends Validator> value();
