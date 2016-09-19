@@ -12,5 +12,5 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Valid {
-    Class<? extends Validator> value();
+    Class<? extends Validator>[] value();
 }

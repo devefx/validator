@@ -7,6 +7,7 @@ import java.util.*;
 /**
  * JsonKit.
  */
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class JsonKit {
 
     private static int convertDepth = 15;

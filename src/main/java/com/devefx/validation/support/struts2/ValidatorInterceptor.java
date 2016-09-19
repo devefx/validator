@@ -1,45 +1,40 @@
 package com.devefx.validation.support.struts2;
 
-import com.devefx.validation.Validator;
-import com.devefx.validation.support.Cache;
+import java.lang.reflect.Method;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.devefx.validation.support.Interceptor;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.ActionProxy;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.interceptor.MethodFilterInterceptor;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.Method;
-
-/**
- * ValidatorInterceptor
- * Created by YYQ on 2016/5/27.
- */
 public class ValidatorInterceptor extends MethodFilterInterceptor {
 
-	private static final long serialVersionUID = -6217418023463824630L;
+	private static final long serialVersionUID = 1L;
 	private static final String HTTP_REQUEST = "com.opensymphony.xwork2.dispatcher.HttpServletRequest";
     private static final String HTTP_RESPONSE = "com.opensymphony.xwork2.dispatcher.HttpServletResponse";
-
-    private final Cache cache = new Cache();
-
-    @Override
-    protected String doIntercept(ActionInvocation invocation) throws Exception {
-        ActionProxy actionProxy = invocation.getProxy();
-        if (actionProxy.getAction() instanceof ActionSupport) {
-            Class<?> actionClass = actionProxy.getAction().getClass();
-            Method method = actionClass.getMethod(invocation.getProxy().getMethod());
-            Validator validator = cache.get(method);
-            if (validator != null) {
-                ActionContext context = invocation.getInvocationContext();
-                HttpServletRequest request = (HttpServletRequest) context.get(HTTP_REQUEST);
-                HttpServletResponse response = (HttpServletResponse) context.get(HTTP_RESPONSE);
-                if (!validator.process(request, response)) {
-                    return null;
-                }
-            }
-        }
+	
+	@Override
+	protected String doIntercept(ActionInvocation invocation) throws Exception {
+		ActionProxy proxy = invocation.getProxy();
+		if (proxy.getAction() instanceof ActionSupport) {
+			ActionContext context = invocation.getInvocationContext();
+            HttpServletRequest request = (HttpServletRequest) context.get(HTTP_REQUEST);
+            HttpServletResponse response = (HttpServletResponse) context.get(HTTP_RESPONSE);
+            Class<?> actionClass = proxy.getAction().getClass();
+			// valid
+			if (!Interceptor.valid(actionClass, request, response)) {
+				return null;
+			}
+			Method method = actionClass.getMethod(proxy.getMethod());
+			if (!Interceptor.valid(method, request, response)) {
+				return null;
+			}
+		}
         return invocation.invoke();
-    }
+	}
 }

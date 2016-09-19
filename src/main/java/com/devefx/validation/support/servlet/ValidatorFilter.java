@@ -13,18 +13,15 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.devefx.validation.Validator;
-import com.devefx.validation.support.Cache;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-/**
- * ValidatorInterceptor
- * Created by YYQ on 2016/9/5.
- */
+import com.devefx.validation.support.Interceptor;
+
 public class ValidatorFilter implements Filter {
 	
+	public static final Logger log = LoggerFactory.getLogger(ValidatorFilter.class);
 	public static final String FIELD_NAME = "servlet";
-	
-	private final Cache cache = new Cache();
 	
 	public Class<?> filterChainClass;
 	public Field filterChainField;
@@ -52,25 +49,24 @@ public class ValidatorFilter implements Filter {
 		try {
 			Servlet servlet =  getServlet(chain);
 			if (servlet != null) {
-				Validator validator = cache.get(servlet.getClass());
-				if (validator != null && !validator.process((HttpServletRequest) request,
-						(HttpServletResponse) response)) {
+				if (!Interceptor.valid(servlet.getClass(), (HttpServletRequest) request, (HttpServletResponse) response)) {
 					return;
 				}
 			}
 		} catch (Exception e) {
+			log.error("An error occurred：", e);
 			e.printStackTrace();
 		}
 		chain.doFilter(request, response);
 	}
-	
+
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-
+		
 	}
 	
 	@Override
 	public void destroy() {
-
+		
 	}
 }
