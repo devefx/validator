@@ -32,7 +32,7 @@ public class CacheImpl implements Cache {
 			Valid valid = key.getAnnotation(Valid.class);
 			for (Class<? extends Validator> validClass : valid.value()) {
 				try {
-					Validator validator = validClass.newInstance();
+					Validator validator = acquireInstance(validClass);
 					validator.setup();
 					value.add(validator);
 				} catch (Exception e) {
@@ -43,6 +43,10 @@ public class CacheImpl implements Cache {
 			put(key, value);
 		}
 		return value;
+	}
+	
+	public Validator acquireInstance(Class<? extends Validator> validClass) throws Exception {
+	    return validClass.newInstance();
 	}
 
 	@Override

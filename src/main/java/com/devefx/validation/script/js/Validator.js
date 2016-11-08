@@ -185,7 +185,7 @@ function Request(form) {
         } catch (e) {
             return null;
         }
-    }
+    };
 }
 /**
  * Bind to jQuery
