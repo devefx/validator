@@ -106,8 +106,8 @@ function Validator() {
                         valid = validator.isValid(request, this);
                         if (isSync) {
                             process(valid);
-                            if (shortCircuit || (!validateFull && !valid)) {
-                                break;
+                            if (!valid && (!validateFull || shortCircuit)) {
+                            	break;
                             }
                         } else return;
                     }
