@@ -21,6 +21,10 @@ public class ValidatorInterceptor extends HandlerInterceptorAdapter {
 			if (!Interceptor.valid(handlerMethod.getMethod(), request, response)) {
 				return false;
 			}
+        } else {
+            if (!Interceptor.valid(handler.getClass(), request, response)) {
+                return false;
+            }
         }
 		return super.preHandle(request, response, handler);
 	}

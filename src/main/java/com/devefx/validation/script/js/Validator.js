@@ -232,6 +232,9 @@ function Request(form) {
                             case "file":
                                 bindEvent = "click";
                                 break;
+                            default:
+                            	bindEvent = "keyup blur";
+                            	break;
                         }
                 }
                 $(input).bind(bindEvent, function() {
@@ -252,7 +255,7 @@ function Request(form) {
             });
         },
         findInputByName: function (name) {
-            return this.find("input[name=" + name + "]");
+            return this.find("[name=" + name + "]");
         }
     });
     window.validatorManager = new ValidatorManager();
