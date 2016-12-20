@@ -13,10 +13,14 @@ import java.util.Date;
  */
 public class JavaScript implements Script {
 
-    private StringBuffer buffer;
+    protected StringBuffer buffer;
 
     public JavaScript(ConstraintValidator validator, Object... args) {
-        buffer = new StringBuffer(validator.getClass().getSimpleName());
+        this(validator.getClass().getSimpleName(), args);
+    }
+
+    public JavaScript(String functionName, Object... args) {
+        buffer = new StringBuffer(functionName);
         buffer.append("(");
         for (int i = 0; i < args.length; i++) {
             buffer.append(i != 0 ? ", " : "");
@@ -30,7 +34,7 @@ public class JavaScript implements Script {
         }
         buffer.append(")");
     }
-
+    
     @Override
     public void output(Writer out) throws IOException {
         out.write(buffer.toString());
@@ -38,5 +42,9 @@ public class JavaScript implements Script {
 
     public static JavaScript create(ConstraintValidator validator, Object... args) {
         return new JavaScript(validator, args);
+    }
+    
+    public static JavaScript create(String functionName, Object... args) {
+        return new JavaScript(functionName, args);
     }
 }

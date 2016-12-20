@@ -7,7 +7,7 @@ import java.lang.annotation.*;
  * Created by YYQ on 2016/5/26.
  */
 @Inherited
-@Target({ElementType.TYPE, })
+@Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface BindScript {
     /**

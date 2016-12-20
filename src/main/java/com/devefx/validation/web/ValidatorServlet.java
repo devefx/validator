@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.lang.ref.SoftReference;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * ValidatorServlet
@@ -23,7 +25,11 @@ public class ValidatorServlet extends HttpServlet {
     private static final long serialVersionUID = -3634086291767542989L;
     private static final String CONTENT_TYPE = "application/x-javascript; charset=utf-8";
     private static final String VALIDATOR_PATH = "com/devefx/validation/script/js/Validator.js";
-
+    private static final String VALIDATOR_MODULE = "/validator/module/";
+    
+    private static final String STATUS_SUCCESS = "success";
+    private static final String STSTUS_FAILURE = "failure";
+    
     private ValidatorConfig validatorConfig;
     private int contextPathLength;
     private String url;
@@ -92,6 +98,8 @@ public class ValidatorServlet extends HttpServlet {
         try {
             if (target.equals(url)) {
                 out.write(buildScript());
+            } else if (target.startsWith(VALIDATOR_MODULE)) {
+                moduleValidateService(request, response, target);
             } else {
                 Validator validator = routes.get(target);
                 if (validator != null) {
@@ -102,4 +110,31 @@ public class ValidatorServlet extends HttpServlet {
             out.flush();
         }
     }
+    
+    protected void moduleValidateService(HttpServletRequest request,
+            HttpServletResponse response, String target) throws IOException {
+        response.setContentType("text/html;charset=utf-8");
+        PrintWriter out = response.getWriter();
+        try {
+            String name = target.substring(VALIDATOR_MODULE.length());
+            Matcher matcher = Pattern.compile("^(\\d+)/(\\d+)$").matcher(name);
+            if (matcher.find()) {
+                int validId = Integer.parseInt(matcher.group(1));
+                int moduleId = Integer.parseInt(matcher.group(2));
+                Validator validator = routes.get(validId);
+                if (validator != null) {
+                    if (validator.moduleValidate(moduleId, request, response)) {
+                        out.write(STATUS_SUCCESS);
+                        return;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            out.flush();
+        }
+        out.write(STSTUS_FAILURE);
+    }
+    
 }

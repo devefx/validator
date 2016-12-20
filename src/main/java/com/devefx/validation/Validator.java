@@ -23,6 +23,7 @@ public abstract class Validator implements Script {
     private final List<ConstraintValidator> modules;
     private boolean invalid;
     private boolean shortCircuit;
+    private int globalId;
     private final Map<String, String> errorMap;
     /**
      * 构造函数
@@ -39,6 +40,20 @@ public abstract class Validator implements Script {
      */
     public void setShortCircuit(boolean shortCircuit) {
         this.shortCircuit = shortCircuit;
+    }
+    /**
+     * 获取全局标识
+     * @return int
+     */
+    public int getGlobalId() {
+        return globalId;
+    }
+    /**
+     * 设置全局标识
+     * @param globalId
+     */
+    public void setGlobalId(int globalId) {
+        this.globalId = globalId;
     }
     /**
      * 添加一个验证器
@@ -80,7 +95,6 @@ public abstract class Validator implements Script {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    // TODO
                 }
             }
             if (invalid) {
@@ -90,6 +104,21 @@ public abstract class Validator implements Script {
             return true;
         }
     }
+    
+    public final boolean moduleValidate(int moduleId, HttpServletRequest request, 
+            HttpServletResponse response) throws Exception {
+        int index = 0;
+        for (ConstraintValidator module: modules) {
+            if (module instanceof Script) {
+                if (index == moduleId) {
+                    return module.isValid(request);
+                }
+                index++;
+            }
+        }
+        return false;
+    }
+    
     /**
      * 错误处理
      * @param request
@@ -121,7 +150,9 @@ public abstract class Validator implements Script {
             writer.append("(function() {\n");
             writer.append(TAB + "validatorManager.register(\"");
             writer.append(getClass().getSimpleName());
-            writer.append("\", function() {\n");
+            writer.append("\", ");
+            writer.append(String.valueOf(globalId));
+            writer.append(", function() {\n");
             writer.append(TAB + TAB + "Validator.apply(this);\n");
             writer.append(TAB + TAB + "this.setup = function () {\n");
             if (shortCircuit) {

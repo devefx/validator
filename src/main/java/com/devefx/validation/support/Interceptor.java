@@ -22,6 +22,10 @@ public class Interceptor {
 		validCahce = cache;
 	}
 	
+	public static Cache getCache() {
+	    return validCahce;
+	}
+	
 	public static boolean valid(AnnotatedElement annotatedElement, HttpServletRequest request, HttpServletResponse response) {
 		List<Validator> validSet = validCahce.get(annotatedElement);
 		if (validSet != null) {

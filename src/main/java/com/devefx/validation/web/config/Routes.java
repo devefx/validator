@@ -1,10 +1,13 @@
 package com.devefx.validation.web.config;
 
+import com.devefx.validation.Cache;
 import com.devefx.validation.Validator;
 import com.devefx.validation.annotation.Mapping;
+import com.devefx.validation.support.Interceptor;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Routes
@@ -12,6 +15,7 @@ import java.util.Map;
  */
 public class Routes {
 
+    private AtomicInteger atomicLong = new AtomicInteger(0);
     private final Map<String, Validator> map = new HashMap<String, Validator>();
     private String basePath = null;
 
@@ -43,13 +47,28 @@ public class Routes {
         if (map.containsKey(visitPath))
             throw new IllegalArgumentException("The visitPath already exists: " + visitPath);
         try {
-            Validator validator = (Validator) validatorClass.newInstance();
+            final Cache cache = Interceptor.getCache();
+            Validator validator = cache.acquireInstance(validatorClass);
+            validator.setGlobalId(atomicLong.incrementAndGet());
             validator.setup();
             map.put(visitPath, validator);
         } catch (Exception e) {
-            throw new RuntimeException("The validatorClass can not initialized");
+            throw new RuntimeException("The validatorClass can not initialized: " + validatorClass);
         }
         return this;
+    }
+    
+    public Validator get(String path) {
+        return map.get(path);
+    }
+    
+    public Validator get(int globalId) {
+        for (Validator validator : map.values()) {
+            if (globalId == validator.getGlobalId()) {
+                return validator;
+            }
+        }
+        return null;
     }
 
     public Routes add(Class<? extends Validator> validatorClass) {
@@ -57,9 +76,5 @@ public class Routes {
             throw new IllegalArgumentException("The validatorClass not have @Mapping : " + validatorClass);
         Mapping mapping = validatorClass.getAnnotation(Mapping.class);
         return add(mapping.value(), validatorClass);
-    }
-
-    public Validator get(String path) {
-        return map.get(path);
     }
 }

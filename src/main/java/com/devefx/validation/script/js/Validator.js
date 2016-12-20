@@ -19,11 +19,11 @@ function FieldValidator(field, errorCode, errorMessage) {
 }
 
 function ValidatorManager() {
-    this.validatorMap = {};
+    this.validatorInfoMap = {};
     this.get = function (name) {
         if (name == undefined) {
             var count = 0;
-            for (var key in this.validatorMap) {
+            for (var key in this.validatorInfoMap) {
                 count++;
                 if (count > 1) {
                     throw new Error("NoUniqueValidatorDefinitionException");
@@ -31,10 +31,15 @@ function ValidatorManager() {
                 name = key;
             }
         }
-        return this.validatorMap[name];
+        var info = this.validatorInfoMap[name];
+        var result = new info.validator();
+        result.globalId = info.id;
+        return result;
     };
-    this.register = function (name, validator) {
-        this.validatorMap[name] = validator;
+    this.register = function (name, id, validator) {
+        this.validatorInfoMap[name] = {
+        	'id': id, 'validator': validator
+        };
     };
 }
 
@@ -48,6 +53,7 @@ function isBank(value) {
 
 function Validator() {
     // Property
+	this.globalId = 0;
     this.validatorList = [];
     this.invalid = false;
     this.shortCircuit = false;
@@ -103,7 +109,7 @@ function Validator() {
                 while (index < length && (validateFull || error == null)) {
                     var validator = validatorList[index ++];
                     if (validateFull || validator.field == name) {
-                        valid = validator.isValid(request, this);
+                        valid = validator.isValid(request, this, self.globalId, index-1);
                         if (isSync) {
                             process(valid);
                             if (!valid && (!validateFull || shortCircuit)) {
@@ -194,7 +200,7 @@ function Request(form) {
     $.fn.extend({
         // support 4 parameters
         validator: function (params) {
-            var validator = new (validatorManager.get(params.name));
+            var validator = validatorManager.get(params.name);
             validator.setup();
 
             var selector = this;
@@ -212,7 +218,7 @@ function Request(form) {
                 return autoSubmit == true;
             });
             // auto validator
-            selector.find(":input[name]").each(function (i, input) {
+            selector.find(":input[name]:not(.ignore)").each(function (i, input) {
                 var bindEvent = null;
                 switch (input.localName) {
                     case "select":
@@ -264,3 +270,25 @@ function Request(form) {
 /**
  * Modules
  */
+function AsyncValidator(field, errorCode, errorMessage) {
+    FieldValidator.apply(this, [field, errorCode, errorMessage]);
+    this.isValid = function (request, control, validId, moduleId) {
+        var value = request.getParameter(field);
+        if (!isEmpty(value)) {
+            control.async();
+            var data = {}; data[field] = value;
+            $.ajax({
+                url: '/validator/module/'+validId+'/'+moduleId,
+                type: 'post',
+                data: data,
+                success: function (result) {
+                    if (result == 'success') {
+                        return control.sync(true);
+                    }
+                    control.sync(false);
+                }
+            });
+        }
+        return true;
+    };
+}

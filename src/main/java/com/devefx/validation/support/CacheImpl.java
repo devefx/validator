@@ -45,6 +45,7 @@ public class CacheImpl implements Cache {
 		return value;
 	}
 	
+	@Override
 	public Validator acquireInstance(Class<? extends Validator> validClass) throws Exception {
 	    return validClass.newInstance();
 	}
