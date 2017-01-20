@@ -9,11 +9,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Routes
  * Created by YYQ on 2016/5/30.
  */
 public class Routes {
+    
+    private Logger log = LoggerFactory.getLogger(Routes.class);
 
     private AtomicInteger atomicLong = new AtomicInteger(0);
     private final Map<String, Validator> map = new HashMap<String, Validator>();
@@ -52,6 +57,9 @@ public class Routes {
             validator.setGlobalId(atomicLong.incrementAndGet());
             validator.setup();
             map.put(visitPath, validator);
+            if (log.isInfoEnabled()) {
+                log.info("Resgister validator [" + validator + "] path [" + visitPath + "]");
+            }
         } catch (Exception e) {
             throw new RuntimeException("The validatorClass can not initialized: " + validatorClass);
         }

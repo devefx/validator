@@ -7,6 +7,9 @@ import com.devefx.validation.kit.ResKit;
 import java.io.FileNotFoundException;
 import java.util.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Modules
  * Created by YYQ on 2016/5/30.
@@ -15,6 +18,8 @@ public class Modules {
 
     private static final String SCRIPT_PATH = "com/devefx/validation/script/js/";
 
+    private Logger log = LoggerFactory.getLogger(Routes.class);
+    
     private final List<Class<? extends ConstraintValidator>> modules = new ArrayList<Class<? extends ConstraintValidator>>(14);
 
     private final Map<String, String> scripts = new TreeMap<String, String>(new Comparator<String>() {
@@ -40,6 +45,9 @@ public class Modules {
                 try {
                     String script = ResKit.getResourceAsString(path);
                     scripts.put(module.getSimpleName(), script);
+                    if (log.isInfoEnabled()) {
+                        log.info("Register module [" + module + "] path [" + path + "]");
+                    }
                 } catch (FileNotFoundException e) {
                     throw new RuntimeException("The file not found: " + path);
                 } catch (Exception e) {

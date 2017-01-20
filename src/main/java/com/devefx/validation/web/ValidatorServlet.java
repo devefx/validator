@@ -11,6 +11,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 import java.lang.ref.SoftReference;
 import java.util.Map;
@@ -30,6 +34,10 @@ public class ValidatorServlet extends HttpServlet {
     private static final String STATUS_SUCCESS = "success";
     private static final String STSTUS_FAILURE = "failure";
     
+    private Logger log = LoggerFactory.getLogger(ValidatorServlet.class);
+    
+    private String name;
+    
     private ValidatorConfig validatorConfig;
     private int contextPathLength;
     private String url;
@@ -41,6 +49,8 @@ public class ValidatorServlet extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         createValidatorConfig(config.getInitParameter("configClass"));
 
+        name = config.getServletName();
+        
         String path = config.getInitParameter("url");
         if (path == null)
             throw new RuntimeException("Please set url parameter of ValidatorServlet in web.xml");
@@ -93,6 +103,11 @@ public class ValidatorServlet extends HttpServlet {
         if (contextPathLength != 0)
             target = target.substring(contextPathLength);
 
+        if (log.isInfoEnabled()) {
+            String method = request.getMethod().toUpperCase();
+            log.info("ValidatorServlet with name '" + name + "' processing " + method + " request for [" + target + "]");
+        }
+        
         response.setContentType(CONTENT_TYPE);
         PrintWriter out = response.getWriter();
         try {
@@ -104,6 +119,11 @@ public class ValidatorServlet extends HttpServlet {
                 Validator validator = routes.get(target);
                 if (validator != null) {
                     validator.output(out);
+                } else {
+                    if (log.isInfoEnabled()) {
+                        log.info("ValidatorServlet with name '" + name + "' not found request for [" + target + "]");
+                    }
+                    response.sendError(404);
                 }
             }
         } finally {

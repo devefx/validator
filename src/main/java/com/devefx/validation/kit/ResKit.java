@@ -1,6 +1,8 @@
 package com.devefx.validation.kit;
 
 import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
 import java.nio.charset.Charset;
 
 /**
@@ -63,6 +65,22 @@ public class ResKit {
         return builder.toString();
     }
 
+    public static InputStream getUrlAsStream(String urlString) throws IOException {
+        URL url = new URL(urlString);
+        URLConnection conn = url.openConnection();
+        return conn.getInputStream();
+    }
+    
+    public static Reader getUrlAsReader(String urlString) throws IOException {
+        Reader reader;
+        if (charset == null) {
+            reader = new InputStreamReader(getUrlAsStream(urlString));
+        } else {
+            reader = new InputStreamReader(getUrlAsStream(urlString), charset);
+        }
+        return reader;
+    }
+    
     public static ClassLoader getClassLoader() {
         if (defaultClassLoader != null)
             return defaultClassLoader;

@@ -36,6 +36,14 @@ public class StrKit {
         return str == null || "".equals(str);
     }
     
+    public static boolean isNotBlank(String str) {
+        return !isBlank(str);
+    }
+
+    public static boolean isNotEmpty(String str) {
+        return !isEmpty(str);
+    }
+    
     public static String format(String pattern, Object ... arguments) {
         if (arguments.length > 0) {
             Matcher matcher = Pattern.compile("\\{(\\d+)\\}").matcher(pattern);
