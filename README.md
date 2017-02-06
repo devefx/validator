@@ -25,6 +25,7 @@ Validator的特性：
 
 #更新日志
 
+- 2017/02/16  修复缓存被JVM回收后未重新生成导致的异常
 - 2016/12/20  增加AsyncFieldValidator抽象，通过继承此类自动实现前后台交互验证功能；增加组件OnlyBackValidator、OnlyFrontValidator；提升Cache利用
 - 2016/09/19	  支持Class验证器（原仅支持方法验证），支持多个验证器
 - 2016/09/05  增加对原始Servlet的验证支持

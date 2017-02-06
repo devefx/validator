@@ -136,7 +136,7 @@ public abstract class Validator implements Script {
         }
     }
     // 弱引用缓存
-    private SoftReference<String> script;
+    private volatile SoftReference<String> script;
     /**
      * Script输出
      * @param out
@@ -145,30 +145,32 @@ public abstract class Validator implements Script {
     @Override
     public void output(Writer out) throws IOException {
         final String TAB = "    ";
-        if (script == null) {
-            StringWriter writer = new StringWriter();
-            writer.append("(function() {\n");
-            writer.append(TAB + "validatorManager.register(\"");
-            writer.append(getClass().getSimpleName());
-            writer.append("\", ");
-            writer.append(String.valueOf(globalId));
-            writer.append(", function() {\n");
-            writer.append(TAB + TAB + "Validator.apply(this);\n");
-            writer.append(TAB + TAB + "this.setup = function () {\n");
-            if (shortCircuit) {
-                writer.append(TAB + TAB + TAB + "this.setShortCircuit(true);\n");
-            }
-            for (ConstraintValidator module: modules) {
-                if (module instanceof Script) {
-                    writer.append(TAB + TAB + TAB + "this.add(new ");
-                    ((Script) module).output(writer);
-                    writer.append(");\n");
+        if (script == null || script.get() == null) {
+            synchronized (script) {
+                StringWriter writer = new StringWriter();
+                writer.append("(function() {\n");
+                writer.append(TAB + "validatorManager.register(\"");
+                writer.append(getClass().getSimpleName());
+                writer.append("\", ");
+                writer.append(String.valueOf(globalId));
+                writer.append(", function() {\n");
+                writer.append(TAB + TAB + "Validator.apply(this);\n");
+                writer.append(TAB + TAB + "this.setup = function () {\n");
+                if (shortCircuit) {
+                    writer.append(TAB + TAB + TAB + "this.setShortCircuit(true);\n");
                 }
+                for (ConstraintValidator module: modules) {
+                    if (module instanceof Script) {
+                        writer.append(TAB + TAB + TAB + "this.add(new ");
+                        ((Script) module).output(writer);
+                        writer.append(");\n");
+                    }
+                }
+                writer.append(TAB + TAB + "};\n");
+                writer.append(TAB + "});\n");
+                writer.append("})();");
+                script = new SoftReference<String>(writer.toString());
             }
-            writer.append(TAB + TAB + "};\n");
-            writer.append(TAB + "});\n");
-            writer.append("})();");
-            script = new SoftReference<String>(writer.toString());
         }
         out.write(script.get());
     }
