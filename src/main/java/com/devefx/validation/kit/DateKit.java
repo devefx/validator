@@ -18,7 +18,7 @@ public class DateKit {
 
     private static DateFormat loadFormat(String pattern) {
         SoftReference<DateFormat> reference = formatReferenceMap.get(pattern);
-        if (reference == null) {
+        if (reference == null || reference.get() == null) {
             DateFormat format = new SimpleDateFormat(pattern);
             formatReferenceMap.put(pattern, new SoftReference<DateFormat>(format));
             return format;

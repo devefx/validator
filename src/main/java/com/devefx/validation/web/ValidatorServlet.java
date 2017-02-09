@@ -16,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.lang.ref.SoftReference;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -81,7 +80,7 @@ public class ValidatorServlet extends HttpServlet {
             throw new RuntimeException("Can not create instance of class: " + configClass + ". Please check the config in web.xml");
     }
 
-    private static SoftReference<String> script;
+    private static String script;
 
     private String buildScript() throws IOException {
         if (script == null) {
@@ -90,9 +89,9 @@ public class ValidatorServlet extends HttpServlet {
                 buf.append("\n");
                 buf.append(entry.getValue());
             }
-            script = new SoftReference<String>(buf.toString());
+            script = buf.toString();
         }
-        return script.get();
+        return script;
     }
 
     @Override

@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -135,8 +134,8 @@ public abstract class Validator implements Script {
             e.printStackTrace();
         }
     }
-    // 弱引用缓存
-    private volatile SoftReference<String> script;
+    
+    private volatile String script;
     /**
      * Script输出
      * @param out
@@ -145,7 +144,7 @@ public abstract class Validator implements Script {
     @Override
     public void output(Writer out) throws IOException {
         final String TAB = "    ";
-        if (script == null || script.get() == null) {
+        if (script == null) {
             synchronized (script) {
                 StringWriter writer = new StringWriter();
                 writer.append("(function() {\n");
@@ -169,9 +168,9 @@ public abstract class Validator implements Script {
                 writer.append(TAB + TAB + "};\n");
                 writer.append(TAB + "});\n");
                 writer.append("})();");
-                script = new SoftReference<String>(writer.toString());
+                script = writer.toString();
             }
         }
-        out.write(script.get());
+        out.write(script);
     }
 }
