@@ -1,6 +1,6 @@
-# Validator
+# <del>Validator</del>
 
-Validator基于Java Web的一款验证框架，其核心设计目的是开发迅速、代码量少、学习简单、功能强大、易扩展
+此项目已经停止更新，改用：https://github.com/devefx/validator-web
 
 ---------------------------------------
 
